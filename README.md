@@ -22,7 +22,6 @@ A web app to solve Sudoku puzzles.
 
 
 
-
 ## Tests ##
 
 
