@@ -1,0 +1,151 @@
+
+:root {
+	--black_border  : 1px solid Black;
+	--header_height : 124px;
+}
+* {
+	margin          : 0;
+	padding         : 0;
+}
+#wrapper {
+	display         : grid;
+	grid            : var( --header_height ) auto auto / auto;
+	align-content   : center;
+	justify-content : center;
+}
+#wrapper > * {
+	border          : var( --black_border );
+}
+#wrapper > p, #wrapper > div {
+	padding         : 12px 64px;
+}
+header h1 {
+	height          : 100%;
+	text-align      : center;
+	line-height     : var( --header_height );
+}
+
+/** readme **/
+#readme {
+	position        : fixed;
+	top             : 0;
+	bottom          : 0;
+	right           : 0;
+	width           : 25%;
+	overflow-y      : scroll;
+	padding         : 42px;
+	background      : Cornsilk;
+	transition      : right 400ms ease-in,
+						visibility 400ms ease-in;
+	visibility      : visible;
+}
+#readme[aria-hidden="true"] {
+	right           : -400px;
+	visibility      : hidden;
+}
+
+/** sudoku **/
+#sudoku {
+	text-align      : center;
+}
+sudoku {
+	--grid_size     : calc( var( --block_size ) * var( --block_size ) );
+	--cell_width    : 42px;
+	--grid_width    : calc( var( --grid_size ) * var( --cell_width ) );
+	display         : block;
+	width           : var( --grid_width );
+	height          : var( --grid_width );
+}
+
+/** grids **/
+grid {
+	--grid_rep      : repeat( var( --grid_size ), var( --cell_width ) );
+	display         : grid;
+	grid            : var( --grid_rep ) / var( --grid_rep );
+	width           : 100%;
+	height          : 100%;
+	border          : var( --black_border );
+	align-content   : center;
+	justify-content : center;
+}
+grid grid {
+	--cell_width    : calc( 100% / var( --block_size ) );
+	--grid_size     : var( --block_size );
+	border          : none;
+}
+
+/** cells **/
+cell {
+	box-sizing      : border-box;
+	width           : var( --cell_width );
+	height          : var( --cell_width );
+	margin          : 0;
+	padding         : 0;
+	background      : White;
+	border          : 1px solid #ccc;
+	text-align      : center;
+	font-size       : calc( var( --cell_width ) * 0.8 );
+	line-height     : var( --cell_width );
+}
+cell.main {
+	transition      : transform .5s;
+}
+cell.main.changed {
+	background      : #f4e6cd;
+}
+#sudoku:not( .edit ) cell.main:hover {
+	transform       : scale( 1.5 );
+	border          : 1px solid #ccc;
+}
+.showoptions cell.optOn,
+grid grid:hover cell.optOn {
+	background      : #b9a7d3;
+}
+cell.option {
+	--cell_width    : 100%;
+	border          : 1px solid #eee;
+}
+cell.top {
+	border-top      : var( --black_border );
+}
+cell.bottom {
+	border-bottom   : var( --black_border );
+}
+cell.left {
+	border-left     : var( --black_border );
+}
+cell.right {
+	border-right    : var( --black_border );
+}
+
+/** panel **/
+#sudoku panel {
+	display         : block;
+	margin          : 12px;
+}
+#sudoku panel button {
+	margin          : 4px;
+	padding         : 7px;
+	min-width       : 32px;
+	min-height      : 32px;
+}
+#sudoku.edit grid grid {
+	display         : none;
+}
+
+/** dialog **/
+dialog {
+}
+dialog textarea,
+dialog [contenteditable] {
+	resize          : none;
+	overflow        : hidden;
+	width           : 320px;
+	font-size       : 32px;
+	letter-spacing  : 1ch;
+	text-indent     : 1ch;
+}
+dialog [contenteditable] {
+	height          : 320px;
+	text-align      : left;
+}
