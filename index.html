@@ -10,6 +10,8 @@
 		<!-- <link rel="stylesheet" href="css/normalize.css"> -->
 		<!-- <link rel="stylesheet" href="css/main.css"> -->
 		<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/8.4.1/markdown-it.min.js"></script>
+		<script src="lib/polyfill.js"></script>
 		<script src="sudoku.js"></script>
 		<style>
 			:root {
@@ -36,6 +38,23 @@
 				height          : 100%;
 				text-align      : center;
 				line-height     : var( --header_height );
+			}
+
+			/** readme **/
+			#readme {
+				position        : fixed;
+				top             : 0;
+				bottom          : 0;
+				right           : 0;
+				width           : 25%;
+				background      : Cornsilk;
+				transition      : right 400ms ease-in,
+									visibility 400ms ease-in;
+				visibility      : visible;
+			}
+			#readme[aria-hidden="true"] {
+				right           : -400px;
+				visibility      : hidden;
 			}
 
 			/** sudoku **/
@@ -154,12 +173,27 @@
 				<h1>Sudoku Solver</h1>
 			</header>
 
-			<p>Hello world! This is HTML5 Boilerplate.</p>
+			<p>
+			A web app to solve Sudoku puzzles. <button id="showreadme">View README file</button>
+			</p>
 			<div id="sudoku"></div>
+			<aside id="readme" aria-hidden="true"></aside>
 		</div>
 		<script>
+
+			var md = window.markdownit();
+			var $readme = $( '#readme' );
+			$.get( 'README.md' ).then(
+				response =>
+					$readme
+						.attr( 'aria-hidden', false )
+						.html( md.render( response ) )
+			);
+			$( '#showreadme' )
+				.click( _ => $readme.attr( 'aria-hidden', false ) )
+
 			window.sudoku = new Sudoku( '#sudoku', 3 );
-			sudoku.importData();
+
 		</script>
 
 	</body>
