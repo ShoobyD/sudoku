@@ -43,7 +43,7 @@ function Sudoku( ELM_SEL, BLOCK_SIZE ) {
 		this.options = new Set( [ value ] );
 
 	};
-	Cell.prototype.update = function( value ) {
+	Cell.prototype.update = function() {
 
 		if ( !this.value && this.options.size === 1 )
 			this.setValue( this.options.values().next().value );
@@ -64,7 +64,7 @@ function Sudoku( ELM_SEL, BLOCK_SIZE ) {
 			cell.options.delete( value );
 
 	};
-	Part.prototype.update = function( value ) {
+	Part.prototype.update = function() {
 
 		for ( let d of DIGITS ) {
 			let unique = this.cells.filter( cell => cell.options.has( d ) );
@@ -270,6 +270,10 @@ function Sudoku( ELM_SEL, BLOCK_SIZE ) {
 	}
 	function insert( x, y, value ) {
 
+		if ( !table[ x ][ y ].options.has( value ) ) {
+			alert( 'Conflict' );
+			return false;
+		}
 		rows[ x ].clear( value );
 		cols[ y ].clear( value );
 		blocks[ x / BLOCK_SIZE | 0 ][ y / BLOCK_SIZE | 0 ].clear( value );
