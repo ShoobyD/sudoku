@@ -343,7 +343,7 @@ function Sudoku( ELM_SEL, BLOCK_SIZE ) {
 			digit = e.which - KEYCODES.NUMPAD0;
 			skip = 1;
 		}
-		if ( cells[ index ].value !== digit )
+		if ( skip && cells[ index ].value !== digit )
 			$this
 				.addClass( 'changed' )
 				.html( digit || ''  );
