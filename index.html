@@ -42,7 +42,21 @@
 						.html( md.render( response ) )
 			);
 			$( '#showreadme' )
-				.click( _ => $readme.attr( 'aria-hidden', false ) )
+				.click( _ => {
+					$readme.attr( 'aria-hidden',
+						( i, attr ) => attr === 'false' )
+					return false;
+				} );
+
+			$( document )
+				.on( 'click touchstart focusin', function( e ) {
+					if ( !$readme.is( e.target ) && !$readme.has( e.target ).length )
+						$readme.attr( 'aria-hidden', true );
+				} )
+				.keydown( function( e ) {
+					if ( e.which === 27 )
+						$readme.attr( 'aria-hidden', true );
+				} );
 
 			window.sudoku = new Sudoku( '#sudoku', 3 );
 
