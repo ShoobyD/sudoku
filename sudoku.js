@@ -26,6 +26,10 @@ function Sudoku( ELM_SEL, BLOCK_SIZE ) {
 
 
 
+	/*==*==*==*==*==*==*==*==*
+	 *      Components       *
+	 *==*==*==*==*==*==*==*==*/
+
 	/*
 	 * constructor Cell
 	 */
@@ -131,6 +135,16 @@ function Sudoku( ELM_SEL, BLOCK_SIZE ) {
 
 
 
+	/*==*==*==*==*==*==*==*==*
+	 *      General fn       *
+	 *==*==*==*==*==*==*==*==*/
+
+	function isDigit( x ) {
+
+		return /^[0-9]$/.test( x );
+
+	}
+
 	const Arr2Grid = arr => `
 		<grid>
 			${ arr.map( ( row, i ) =>
@@ -175,6 +189,65 @@ function Sudoku( ELM_SEL, BLOCK_SIZE ) {
 	function dialog( msg ) {
 
 		alert( msg );
+
+	}
+
+
+
+	/*==*==*==*==*==*==*==*==*
+	 *       Sudoku fn       *
+	 *==*==*==*==*==*==*==*==*/
+
+	function BuildPanel() {
+
+		const btnData = [
+			[
+				{
+					'title' : 'Edit',
+					'fn'    : _ => edit(),
+				},
+				{
+					'title' : 'Show Options',
+					'fn'    : _ => $sudoku.toggleClass( 'showoptions' ),
+				},
+				{
+					'title' : '+',
+					'fn'    : _ => ChangeSize( 6 ),
+				},
+				{
+					'title' : '-',
+					'fn'    : _ => ChangeSize( -6 ),
+				},
+				{
+					'title' : 'Update',
+					'fn'    : _ => update(),
+				},
+			],
+			[
+				{
+					'title' : 'Import Data',
+					'fn'    : _ => importData(),
+				},
+				{
+					'title' : 'Export Data',
+					'fn'    : _ => exportData(),
+				},
+			],
+		];
+		const $panel = $( '<panel>' )
+			.appendTo( $wrap );
+
+		for ( let d of btnData ) {
+			let $div = $( '<div>' ).appendTo( $panel );
+			for ( let b of d ) {
+				$( '<button>' )
+					.html( b.title )
+					.click( b.fn )
+					.appendTo( $div );
+			}
+		}
+
+		return $panel;
 
 	}
 
@@ -281,6 +354,12 @@ function Sudoku( ELM_SEL, BLOCK_SIZE ) {
 
 	}
 
+
+
+	/*==*==*==*==*==*==*==*==*
+	 *       Handlers        *
+	 *==*==*==*==*==*==*==*==*/
+
 	function BuildSudoku() {
 
 		const $sudoku = $( '<sudoku>' )
@@ -333,20 +412,20 @@ function Sudoku( ELM_SEL, BLOCK_SIZE ) {
 		const $this = $( this );
 		const index = $this.index();
 		const SIZE2 = SIZE * SIZE;
+		const isBig = BLOCK_SIZE > 3;
 		let skip, digit;
 
-		if ( KEYCODES.NUM0 <= e.which && e.which <= KEYCODES.NUM9 ) {
+		if ( KEYCODES.NUM0 <= e.which && e.which <= KEYCODES.NUM9 )
 			digit = e.which - KEYCODES.NUM0;
-			skip = 1;
-		}
-		else if ( KEYCODES.NUMPAD0 <= e.which && e.which <= KEYCODES.NUMPAD9 ) {
+		else if ( KEYCODES.NUMPAD0 <= e.which && e.which <= KEYCODES.NUMPAD9 )
 			digit = e.which - KEYCODES.NUMPAD0;
-			skip = 1;
-		}
-		if ( skip && cells[ index ].value !== digit )
+
+		if ( isDigit( digit ) && cells[ index ].value !== digit ) {
 			$this
 				.addClass( 'changed' )
-				.html( digit || ''  );
+				[ isBig? 'append' : 'html' ]( digit || '' );
+			skip = !isBig;
+		}
 
 		switch ( e.which ) {
 
@@ -363,8 +442,12 @@ function Sudoku( ELM_SEL, BLOCK_SIZE ) {
 				return false;
 
 			case KEYCODES.BKSP:
-				$this.empty();
-				skip = -1;
+				if ( isBig )
+					$this.html( $this.html().slice( 0, -1 ) );
+				else {
+					$this.empty();
+					skip = -1;
+				}
 				break;
 
 			case KEYCODES.LEFT:
@@ -401,62 +484,11 @@ function Sudoku( ELM_SEL, BLOCK_SIZE ) {
 
 	}
 
-	function BuildPanel() {
-
-		const btnData = [
-			[
-				{
-					'title' : 'Edit',
-					'fn'    : _ => edit(),
-				},
-				{
-					'title' : 'Show Options',
-					'fn'    : _ => $sudoku.toggleClass( 'showoptions' ),
-				},
-				{
-					'title' : '+',
-					'fn'    : _ => ChangeSize( 6 ),
-				},
-				{
-					'title' : '-',
-					'fn'    : _ => ChangeSize( -6 ),
-				},
-				{
-					'title' : 'Update',
-					'fn'    : _ => update(),
-				},
-			],
-			[
-				{
-					'title' : 'Import Data',
-					'fn'    : _ => importData(),
-				},
-				{
-					'title' : 'Export Data',
-					'fn'    : _ => exportData(),
-				},
-			],
-		];
-		const $panel = $( '<panel>' )
-			.appendTo( $wrap );
-
-		for ( let d of btnData ) {
-			let $div = $( '<div>' ).appendTo( $panel );
-			for ( let b of d ) {
-				$( '<button>' )
-					.html( b.title )
-					.click( b.fn )
-					.appendTo( $div );
-			}
-		}
-
-		return $panel;
-
-	}
 
 
-
-	/** main **/
+	/*==*==*==*==*==*==*==*==*
+	 *         Main          *
+	 *==*==*==*==*==*==*==*==*/
 
 	// constants
 	const SIZE        = BLOCK_SIZE * BLOCK_SIZE;

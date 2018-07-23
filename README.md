@@ -2,6 +2,8 @@
 
 A web app to solve Sudoku puzzles.
 
+[Demo](https://shoobyd.github.io/sudoku/)
+
 
 ## ToDo List ##
 
@@ -17,10 +19,14 @@ A web app to solve Sudoku puzzles.
 
 * Error checking
 * Importing data block
-* Dialog
 * Class 'changed' only on real changes
 * Adding 'cells' array for loops simplifying
 * Backspace
+
+
+### Defunct ###
+
+* Dialog
 
 
 
