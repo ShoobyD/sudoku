@@ -456,9 +456,9 @@ function Sudoku( ELM_SEL, BLOCK_SIZE ) {
 		else if ( KEYCODES.NUMPAD0 <= e.which && e.which <= KEYCODES.NUMPAD9 )
 			digit = e.which - KEYCODES.NUMPAD0;
 
-		if ( isDigit( digit ) && cells[ index ].value !== digit ) {
+		if ( isDigit( digit ) ) {
 			$this
-				.addClass( 'changed' )
+				[ cells[ index ].value !== digit? 'addClass': 'removeClass' ]( 'changed' )
 				[ isBig? 'append' : 'html' ]( digit || '' );
 			skip = !isBig;
 		}
