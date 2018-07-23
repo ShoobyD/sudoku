@@ -410,13 +410,19 @@ function Sudoku( ELM_SEL, BLOCK_SIZE ) {
 	}
 	function handleCellPaste( e ) {
 
-		let str = e.originalEvent.clipboardData.getData( 'text' ).replace( /[\r\n]/g, '' );
-		if ( str.length !== 81 ) alert( 'Bad import data' );
-		else $sudoku.find( 'cell.main' ).each( function( i ) {
-			if ( /[1-9]/.test( str[ i ] ) )
+		const input = e.originalEvent.clipboardData.getData( 'text' )
+						.replace( /\s+[^1-9]\s+/g, ' - ' )
+						.trim()
+						.split( /\s+/ );
+		if ( input.length !== SIZE2 ) {
+			alert( 'Bad import data' );
+			return false;
+		}
+		$sudoku.find( 'cell.main' ).each( function( i ) {
+			if ( /[0-9]/.test( input[ i ] ) )
 				$( this )
 					.addClass( 'changed' )
-					.html( str[ i ] );
+					.html( +input[ i ] || '' );
 		} );
 		return false;
 
@@ -447,7 +453,6 @@ function Sudoku( ELM_SEL, BLOCK_SIZE ) {
 
 		const $this = $( this );
 		const index = $this.index();
-		const SIZE2 = SIZE * SIZE;
 		const isBig = BLOCK_SIZE > 3;
 		let skip, digit;
 
@@ -528,6 +533,7 @@ function Sudoku( ELM_SEL, BLOCK_SIZE ) {
 
 	// constants
 	const SIZE        = BLOCK_SIZE * BLOCK_SIZE;
+	const SIZE2       = SIZE * SIZE;
 	const BLOCK_RANGE = [ ...Array( BLOCK_SIZE ).keys() ];
 	const RANGE       = [ ...Array( SIZE ).keys() ];
 	const RANGEALL    = [ ...Array( SIZE * SIZE ).keys() ];
