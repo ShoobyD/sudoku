@@ -186,9 +186,51 @@ function Sudoku( ELM_SEL, BLOCK_SIZE ) {
 
 	}
 
-	function dialog( msg ) {
+	function Dialog() {
 
-		alert( msg );
+		$dialog   = $( '<dialog>' )
+			.appendTo( $wrap );
+
+		$content  = $( '<div class="content">' )
+			.click( _ => selectText() )
+			.appendTo( $dialog );
+
+		$closeBtn = $( '<button>' )
+			.html( 'Close' )
+			.click( _ => close() )
+			.appendTo( $dialog );
+
+		$( document )
+			.click( function( e ) {
+				if ( !$dialog.isOrHas( e.target ) ) close();
+			} )
+			.keydown( function( e ) {
+				if ( e.which === 27 ) close();
+			} );
+
+		function selectText() {
+
+			getSelection().selectAllChildren( $content[ 0 ] );
+
+		}
+
+		function open( msg ) {
+
+			$content.html( msg + '\n' );
+			$dialog.prop( 'open', true );
+
+		}
+
+		function close() {
+
+			$dialog.prop( 'open', false );
+
+		}
+
+		return {
+			open,
+			close,
+		};
 
 	}
 
@@ -225,12 +267,15 @@ function Sudoku( ELM_SEL, BLOCK_SIZE ) {
 			],
 			[
 				{
-					'title' : 'Import Data',
-					'fn'    : _ => importData(),
+					'title' : 'Set as base',
+					'fn'    : _ => setBase(),
 				},
 				{
 					'title' : 'Export Data',
-					'fn'    : _ => exportData(),
+					'fn'    : _ => {
+						exportData();
+						return false;
+					},
 				},
 			],
 		];
@@ -251,27 +296,18 @@ function Sudoku( ELM_SEL, BLOCK_SIZE ) {
 
 	}
 
-	function importData() {
-
-		let $dialog = $wrap.find( 'dialog' );
-		if ( !$dialog.length )
-			$dialog = $( '<dialog>' )
-				.html( '<div contenteditable>' )
-				//.html( `<textarea rows="${ SIZE }" maxlength="${ SIZE * SIZE }">` )
-				.appendTo( $wrap );
-
-		$dialog.prop( 'open', true );
+	function setBase() {
 
 	}
 
 	function exportData() {
 
-		dialog(
+		dialog.open(
 			table.map( ( row, i ) =>
 				row.map(
 					cell => cell.value || '-'
-				).join( '' )
-			).join( '\n' )
+				).join( ' ' )
+			).join( '<br>' )
 		);
 
 	}
@@ -542,6 +578,7 @@ function Sudoku( ELM_SEL, BLOCK_SIZE ) {
 	const $wrap       = $( ELM_SEL );
 	const $sudoku     = BuildSudoku();
 	const $panel      = BuildPanel();
+	const dialog      = new Dialog();
 
 	const table       = RANGE.map( i => RANGE.map( j => new Cell( i, j ) ) );
 	const cells       = table.flat();
@@ -559,7 +596,6 @@ function Sudoku( ELM_SEL, BLOCK_SIZE ) {
 	/** API **/
 	return {
 		insert,
-		importData,
 	};
 
 }

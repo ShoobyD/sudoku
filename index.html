@@ -13,7 +13,8 @@
 
 		<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/8.4.1/markdown-it.min.js"></script>
-		<script src="lib/polyfill.js"></script>
+		<script src="lib/polyfills.js"></script>
+		<script src="lib/utils.js"></script>
 		<script src="sudoku.js"></script>
 
 	</head>
@@ -33,30 +34,44 @@
 		</div>
 		<script>
 
-			var md = window.markdownit();
-			var $readme = $( '#readme' );
-			$.get( 'README.md' ).then(
-				response =>
-					$readme
-						.attr( 'aria-hidden', false )
-						.html( md.render( response ) )
-			);
-			$( '#showreadme' )
-				.click( _ => {
-					$readme.attr( 'aria-hidden',
-						( i, attr ) => attr === 'false' )
-					return false;
-				} );
+			( function() {
 
-			$( document )
-				.on( 'click touchstart focusin', function( e ) {
-					if ( !$readme.is( e.target ) && !$readme.has( e.target ).length )
-						$readme.attr( 'aria-hidden', true );
-				} )
-				.keydown( function( e ) {
-					if ( e.which === 27 )
-						$readme.attr( 'aria-hidden', true );
-				} );
+				const md = window.markdownit();
+				const $readme = $( '#readme' );
+
+				$.get( 'README.md' ).then(
+					response => {
+						$readme.html( md.render( response ) );
+						open();
+					}
+				);
+				$( '#showreadme' )
+					.click( _ => {
+						toggle();
+						return false;
+					} );
+
+				$( document )
+					.on( 'click touchstart focusin', function( e ) {
+						if ( !$readme.isOrHas( e.target ) ) close();
+					} )
+					.keydown( function( e ) {
+						if ( e.which === 27 ) close();
+					} );
+
+				function open() {
+					$readme.attr( 'aria-hidden', false );
+				}
+
+				function close() {
+					$readme.attr( 'aria-hidden', true  );
+				}
+
+				function toggle() {
+					$readme.attr( 'aria-hidden', ( i, attr ) => attr === 'false' );
+				}
+
+			} )();
 
 			window.sudoku = new Sudoku( '#sudoku', 3 );
 

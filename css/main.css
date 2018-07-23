@@ -135,17 +135,18 @@ cell.right {
 
 /** dialog **/
 dialog {
+	position        : fixed;
+	margin          : auto;
+	padding         : 32px;
+	top             : 50%;
+	transform       : translateY( -50% );
 }
-dialog textarea,
-dialog [contenteditable] {
-	resize          : none;
-	overflow        : hidden;
-	width           : 320px;
+dialog .content {
 	font-size       : 32px;
-	letter-spacing  : 1ch;
-	text-indent     : 1ch;
+	font-family     : consolas, monospace;
+	width           : 480px;
+	height          : 480px;
+	text-align      : justify;
+    text-align-last : justify;
 }
-dialog [contenteditable] {
-	height          : 320px;
-	text-align      : left;
-}
+
