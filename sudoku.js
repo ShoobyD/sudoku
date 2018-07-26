@@ -186,54 +186,6 @@ function Sudoku( ELM_SEL, BLOCK_SIZE ) {
 
 	}
 
-	function Dialog() {
-
-		$dialog   = $( '<dialog>' )
-			.appendTo( $wrap );
-
-		$content  = $( '<div class="content">' )
-			.click( _ => selectText() )
-			.appendTo( $dialog );
-
-		$closeBtn = $( '<button>' )
-			.html( 'Close' )
-			.click( _ => close() )
-			.appendTo( $dialog );
-
-		$( document )
-			.click( function( e ) {
-				if ( !$dialog.isOrHas( e.target ) ) close();
-			} )
-			.keydown( function( e ) {
-				if ( e.which === 27 ) close();
-			} );
-
-		function selectText() {
-
-			getSelection().selectAllChildren( $content[ 0 ] );
-
-		}
-
-		function open( msg ) {
-
-			$content.html( msg + '\n' );
-			$dialog.prop( 'open', true );
-
-		}
-
-		function close() {
-
-			$dialog.prop( 'open', false );
-
-		}
-
-		return {
-			open,
-			close,
-		};
-
-	}
-
 
 
 	/*==*==*==*==*==*==*==*==*
@@ -246,7 +198,7 @@ function Sudoku( ELM_SEL, BLOCK_SIZE ) {
 			[
 				{
 					'title' : 'Edit',
-					'fn'    : _ => edit(),
+					'fn'    : edit,
 				},
 				{
 					'title' : 'Show Options',
@@ -262,7 +214,7 @@ function Sudoku( ELM_SEL, BLOCK_SIZE ) {
 				},
 				{
 					'title' : 'Update',
-					'fn'    : _ => update(),
+					'fn'    : update,
 				},
 			],
 			[

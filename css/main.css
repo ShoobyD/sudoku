@@ -141,6 +141,11 @@ dialog {
 	top             : 50%;
 	transform       : translateY( -50% );
 }
+dialog .closeBtn {
+	display         : block;
+	margin          : auto;
+	padding         : 7px;
+}
 dialog .content {
 	font-size       : 32px;
 	font-family     : consolas, monospace;
