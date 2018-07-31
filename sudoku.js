@@ -198,7 +198,7 @@ function Sudoku( ELM_SEL, BLOCK_SIZE ) {
 			[
 				{
 					'title' : 'Edit',
-					'fn'    : edit,
+					'fn'    : _ => edit(),
 				},
 				{
 					'title' : 'Show Options',
