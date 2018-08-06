@@ -50,7 +50,7 @@ function Sudoku( ELM_SEL, BLOCK_SIZE ) {
 	Cell.prototype.update = function() {
 
 		if ( !this.value && this.options.size === 1 )
-			this.setValue( this.options.values().next().value );
+			insert( this.x, this.y, this.options.values().next().value );
 
 	};
 
@@ -512,7 +512,7 @@ function Sudoku( ELM_SEL, BLOCK_SIZE ) {
 
 	/** API **/
 	return {
-		insert,
+		//insert,
 	};
 
 }
