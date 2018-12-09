@@ -29,7 +29,6 @@ A web app to solve Sudoku puzzles.
 * Dialog
 
 
-
 ## Tests ##
 
 
